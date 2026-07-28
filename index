@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОГЭ Математика: Задачи на движение и маршруты</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f7f7;
+            min-height: 100vh;
+            padding: 0;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #66BFBF 0%, #4A9898 100%);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero-section h1 {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 15px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 30px;
+        }
+
+        .sound-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s;
+            font-family: inherit;
+            color: #66BFBF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sound-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .sound-toggle.muted {
+            color: #95a5a6;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: -50px auto 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px 30px;
+            background: #f0f7f7;
+            border-radius: 15px;
+            min-width: 150px;
+            transition: transform 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #66BFBF;
+            display: block;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.95em;
+            margin-top: 5px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #66BFBF, #4A9898);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .menu-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-color: #66BFBF;
+        }
+
+        .menu-card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .menu-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+            font-weight: 600;
+        }
+
+        .menu-card p {
+            color: #7f8c8d;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .task-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .task-number {
+            background: linear-gradient(135deg, #66BFBF, #4A9898);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .task-description {
+            background: #f0f7f7;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+            font-size: 1.05em;
+            border-left: 4px solid #66BFBF;
+            text-align: justify;
+        }
+
+        .highlightable {
+            background: transparent;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            padding: 2px 6px;
+            cursor: pointer;
+            border-bottom: 2px dashed transparent;
+        }
+
+        .highlightable:hover {
+            background: #d4edda;
+            border-bottom-color: #66BFBF;
+        }
+
+        .map-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            overflow: hidden;
+            border: 2px solid #e8f4f4;
+        }
+
+        .map-svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .answer-section {
+            margin-top: 25px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #66BFBF;
+            box-shadow: 0 0 0 4px rgba(102, 191, 191, 0.1);
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #66BFBF, #4A9898);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 191, 191, 0.4);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-hint {
+            background: #f1c40f;
+            color: #2c3e50;
+        }
+
+        .btn-hint:hover {
+            background: #d4ac0d;
+        }
+
+        .hint-box {
+            background: #fff9e6;
+            border-left: 4px solid #f1c40f;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .hint-box.show {
+            display: block;
+        }
+
+        .feedback {
+            padding: 18px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: 600;
+            display: none;
+            animation: bounceIn 0.5s ease;
+        }
+
+        .feedback.correct {
+            background: #e8f8f0;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.incorrect {
+            background: #fdedec;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .variant-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .variant-btn {
+            padding: 12px 30px;
+            border: 2px solid #66BFBF;
+            background: white;
+            color: #66BFBF;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        .variant-btn.active {
+            background: #66BFBF;
+            color: white;
+        }
+
+        .variant-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 191, 191, 0.3);
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            background: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s;
+            font-family: inherit;
+            color: #66BFBF;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .achievement {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            opacity: 0.6;
+        }
+
+        .achievement.unlocked {
+            background: linear-gradient(135deg, #f9e79f, #f1c40f);
+            animation: pulse 2s infinite;
+            opacity: 1;
+        }
+
+        .achievement-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 25px;
+            overflow: hidden;
+            margin: 25px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #66BFBF, #4A9898);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ecf0f1;
+        }
+
+        th {
+            background: linear-gradient(135deg, #66BFBF, #4A9898);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .highlight {
+            background: #fff9e6 !important;
+            font-weight: 600;
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #f9e79f, #f1c40f);
+            color: #2c3e50;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            z-index: 10000;
+            animation: slideIn 0.5s ease;
+            font-weight: 600;
+            max-width: 350px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2em;
+            }
+            
+            .menu {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="sound-toggle muted" id="soundToggle" onclick="toggleSound()">
+        <span id="soundIcon">🔇</span>
+        <span id="soundText">Звук выключен</span>
+    </button>
+
+    <div class="container">
+        <section class="hero-section">
+            <div class="hero-content">
+                <span class="hero-badge">Репетитор Кристина Константиновна Булатникова</span>
+                <h1>Практико-ориентированные задачи</h1>
+                <p>Задачи на движение, маршруты и оптимальный выбор. Подготовка к ОГЭ по математике с интерактивными заданиями и мгновенной проверкой.</p>
+            </div>
+        </section>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value" id="totalSolved">0</span>
+                <div class="stat-label">Решено задач</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="correctAnswers">0</span>
+                <div class="stat-label">Правильных ответов</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="accuracy">0%</span>
+                <div class="stat-label">Точность</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="currentStreak">0</span>
+                <div class="stat-label">Серия подряд </div>
+            </div>
+        </div>
+
+        <div id="mainMenu">
+            <div class="menu">
+                <div class="menu-card" onclick="showLearningMode()">
+                    <span class="menu-card-icon">📖</span>
+                    <h3>Режим обучения</h3>
+                    <p>Подробный разбор задач с подсказками, пошаговыми решениями и объяснениями каждого шага</p>
+                </div>
+                <div class="menu-card" onclick="showPracticeMode()">
+                    <span class="menu-card-icon">✏️</span>
+                    <h3>Самостоятельная работа</h3>
+                    <p>3 варианта задач для тренировки. Проверьте свои знания без подсказок</p>
+                </div>
+                <div class="menu-card" onclick="showAchievements()">
+                    <span class="menu-card-icon">🏆</span>
+                    <h3>Достижения</h3>
+                    <p>Ваши успехи, награды и статистика прогресса</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="learningMode" style="display: none;">
+            <button class="back-btn" onclick="showMainMenu()">← Назад к меню</button>
+            <div style="margin-top: 80px;">
+                <h2 style="color: #2c3e50; margin-bottom: 30px; text-align: center; font-size: 2em;">📖 Режим обучения</h2>
+                <div id="learningContent"></div>
+            </div>
+        </div>
+
+        <div id="practiceMode" style="display: none;">
+            <button class="back-btn" onclick="showMainMenu()">← Назад к меню</button>
+            <div style="margin-top: 80px;">
+                <h2 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 2em;">✏️ Самостоятельная работа</h2>
+                <p style="text-align: center; color: #7f8c8d; margin-bottom: 30px;">Выберите вариант для выполнения</p>
+                <div class="variant-selector">
+                    <button class="variant-btn active" onclick="selectVariant(1)">Вариант 1</button>
+                    <button class="variant-btn" onclick="selectVariant(2)">Вариант 2</button>
+                    <button class="variant-btn" onclick="selectVariant(3)">Вариант 3</button>
+                </div>
+                <div id="practiceContent"></div>
+            </div>
+        </div>
+
+        <div id="achievementsMode" style="display: none;">
+            <button class="back-btn" onclick="showMainMenu()">← Назад к меню</button>
+            <div style="margin-top: 80px;">
+                <h2 style="color: #2c3e50; margin-bottom: 30px; text-align: center; font-size: 2em;">🏆 Ваши достижения</h2>
+                <div id="achievementsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let soundsEnabled = false;
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const sounds = {
+            click: () => { if (soundsEnabled) playSound(600, 0.1, 'sine'); },
+            correct: () => { 
+                if (!soundsEnabled) return;
+                playSound(523.25, 0.15, 'sine');
+                setTimeout(() => playSound(659.25, 0.15, 'sine'), 100);
+                setTimeout(() => playSound(783.99, 0.3, 'sine'), 200);
+            },
+            incorrect: () => { 
+                if (!soundsEnabled) return;
+                playSound(200, 0.3, 'sawtooth');
+                setTimeout(() => playSound(150, 0.3, 'sawtooth'), 150);
+            },
+            achievement: () => { 
+                if (!soundsEnabled) return;
+                playSound(523.25, 0.2, 'sine');
+                setTimeout(() => playSound(659.25, 0.2, 'sine'), 150);
+                setTimeout(() => playSound(783.99, 0.2, 'sine'), 300);
+                setTimeout(() => playSound(1046.50, 0.4, 'sine'), 450);
+            },
+            hover: () => { if (soundsEnabled) playSound(800, 0.05, 'sine', 0.05); }
+        };
+
+        function playSound(frequency, duration, type = 'sine', volume = 0.1) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function toggleSound() {
+            soundsEnabled = !soundsEnabled;
+            const toggle = document.getElementById('soundToggle');
+            const icon = document.getElementById('soundIcon');
+            const text = document.getElementById('soundText');
+            if (soundsEnabled) {
+                toggle.classList.remove('muted');
+                icon.textContent = '🔊';
+                text.textContent = 'Звук включён';
+                if (audioContext.state === 'suspended') audioContext.resume();
+            } else {
+                toggle.classList.add('muted');
+                icon.textContent = '🔇';
+                text.textContent = 'Звук выключен';
+            }
+        }
+
+        const variants = {
+            1: {
+                a: 9, b: 6, c: 8,
+                highwaySpeed: 25,
+                trailSpeed: 15,
+                cellSize: 1,
+                settlements: {
+                    start: 'д. Лягушкино',
+                    end: 'с. Вятское',
+                    point1: 'д. Куровка',
+                    point2: 'д. Марусино'
+                },
+                prices: {
+                    lyagushkino: { milk: 32, bread: 26, cheese: 220, beef: 360, potato: 16 },
+                    vyatskoe: { milk: 38, bread: 28, cheese: 260, beef: 350, potato: 15 },
+                    kurovka: { milk: 31, bread: 35, cheese: 230, beef: 330, potato: 22 },
+                    marusino: { milk: 44, bread: 25, cheese: 240, beef: 400, potato: 17 }
+                },
+                mapTransform: '',
+                gridWidth: 20,
+                gridHeight: 15,
+                task1Order: ['start', 'end', 'point2'],
+                hints: [
+                    'Определите начальную точку (откуда начинают путь), конечную точку (куда едут) и промежуточный пункт на пересечении дорог. Найдите соответствующие цифры на плане.',
+                    'Сложите расстояния по шоссе: от начальной точки до первого перекрёстка, затем до второго перекрёстка и до конечной точки. Умножьте количество клеток на размер клетки.',
+                    'Найдите расстояние от промежуточного пункта до конечной точки по шоссе через второй перекрёсток. Сложите два отрезка пути.',
+                    'Примените теорему Пифагора: найдите гипотенузу прямоугольного треугольника. Катеты — это расстояния по горизонтали и вертикали между точками.',
+                    'Примените теорему Пифагора для меньшего треугольника. Найдите гипотенузу, зная катеты.',
+                    'Найдите время по формуле: время = расстояние / скорость. Не забудьте перевести часы в минуты (умножьте на 60).',
+                    'Разбейте путь на две части: сначала по шоссе до перекрёстка, затем по тропинке. Найдите время для каждой части и сложите.',
+                    'Посчитайте стоимость каждого товара в каждом магазине, умножив цену на количество. Найдите общую стоимость набора в каждом магазине и выберите наименьшую.',
+                    'Аналогично предыдущему заданию: посчитайте стоимость всего набора в каждом магазине и найдите минимальную цену.'
+                ]
+            },
+            2: {
+                a: 4, b: 12, c: 5,
+                highwaySpeed: 60,
+                trailSpeed: 40,
+                cellSize: 2,
+                settlements: {
+                    start: 'д. Пирожки',
+                    end: 'с. Кижикское',
+                    point1: 'д. Рябиновка',
+                    point2: 'д. Васильево'
+                },
+                prices: {
+                    pirozhki: { milk: 48, bread: 34, cheese: 240, beef: 370, potato: 22 },
+                    kizhikskoe: { milk: 45, bread: 32, cheese: 280, beef: 400, potato: 16 },
+                    vasilyevo: { milk: 50, bread: 33, cheese: 270, beef: 380, potato: 28 },
+                    ryabinovka: { milk: 52, bread: 28, cheese: 260, beef: 420, potato: 30 }
+                },
+                mapTransform: '',
+                gridWidth: 18,
+                gridHeight: 10,
+                task1Order: ['end', 'start', 'point1'],
+                hints: [
+                    'Определите, откуда начинают путь, куда едут и где находится перекрёсток. Найдите соответствующие цифры на плане.',
+                    'Сложите все отрезки пути по шоссе и умножьте на размер клетки.',
+                    'Найдите расстояние между двумя пунктами по шоссе, сложив два отрезка.',
+                    'Используйте теорему Пифагора для нахождения расстояния по прямой между двумя точками.',
+                    'Найдите гипотенузу прямоугольного треугольника с известными катетами.',
+                    'Разделите расстояние на скорость и переведите результат в минуты.',
+                    'Найдите время движения по шоссе до перекрёстка и время по грунтовой дороге, затем сложите.',
+                    'Умножьте количество каждого товара на его цену в каждом магазине, найдите общую стоимость и выберите минимальную.',
+                    'Посчитайте стоимость набора в каждом магазине и найдите наименьшее значение.'
+                ]
+            },
+            3: {
+                a: 9, b: 3, c: 12,
+                highwaySpeed: 25,
+                trailSpeed: 18,
+                cellSize: 3,
+                settlements: {
+                    start: 'д. Васильевка',
+                    end: 'с. Плодородное',
+                    point1: 'д. Рассвет',
+                    point2: 'д. Шаровка'
+                },
+                prices: {
+                    vasilyevka: { milk: 37, bread: 16, cheese: 240, beef: 420, potato: 30 },
+                    plodorodnoe: { milk: 38, bread: 18, cheese: 280, beef: 430, potato: 28 },
+                    sharovka: { milk: 36, bread: 22, cheese: 250, beef: 415, potato: 35 },
+                    rassvet: { milk: 39, bread: 21, cheese: 260, beef: 410, potato: 25 }
+                },
+                mapTransform: '',
+                gridWidth: 15,
+                gridHeight: 16,
+                task1Order: ['point2', 'end', 'start'],
+                hints: [
+                    'Найдите на плане деревню на пересечении дорог, конечный пункт назначения и начальную точку. Запишите цифры в указанном порядке.',
+                    'Сложите длины всех участков шоссе и умножьте на размер клетки.',
+                    'Найдите расстояние по шоссе между двумя указанными пунктами.',
+                    'Примените теорему Пифагора: квадрат гипотенузы равен сумме квадратов катетов.',
+                    'Найдите расстояние по прямой, используя теорему Пифагора.',
+                    'Вычислите время движения по формуле t = S/v и переведите в минуты.',
+                    'Разделите путь на две части и найдите время для каждой части отдельно.',
+                    'Посчитайте стоимость всех товаров в наборе для каждого магазина.',
+                    'Найдите магазин с минимальной стоимостью набора продуктов.'
+                ]
+            },
+            4: {
+                a: 12, b: 6, c: 12,
+                highwaySpeed: 15,
+                trailSpeed: 10,
+                cellSize: 1,
+                settlements: {
+                    start: 'д. Дивная',
+                    end: 'с. Ольгино',
+                    point1: 'с. Ровное',
+                    point2: 'д. Калиновка'
+                },
+                prices: {
+                    olgino: { milk: 35, bread: 25, cheese: 240, beef: 370, potato: 17 },
+                    divnaya: { milk: 32, bread: 22, cheese: 280, beef: 420, potato: 18 },
+                    rovnoe: { milk: 38, bread: 19, cheese: 260, beef: 380, potato: 19 },
+                    kalinovka: { milk: 36, bread: 20, cheese: 300, beef: 350, potato: 22 }
+                },
+                mapTransform: '',
+                gridWidth: 20,
+                gridHeight: 16,
+                task1Order: ['start', 'point2', 'end'],
+                hints: [
+                    'Определите начальную точку, промежуточный пункт и конечную точку на плане.',
+                    'Найдите общую длину пути по шоссе, сложив все отрезки.',
+                    'Вычислите расстояние между двумя пунктами по шоссе.',
+                    'Используйте теорему Пифагора для нахождения расстояния по прямой.',
+                    'Найдите гипотенузу прямоугольного треугольника.',
+                    'Разделите расстояние на скорость и умножьте на 60 для перевода в минуты.',
+                    'Найдите время для каждого участка пути и сложите результаты.',
+                    'Посчитайте стоимость набора в каждом магазине.',
+                    'Сравните стоимости и выберите наименьшую.'
+                ]
+            }
+        };
+
+        let progress = JSON.parse(localStorage.getItem('ogeProgress')) || {
+            totalSolved: 0,
+            correctAnswers: 0,
+            streak: 0,
+            achievements: [],
+            solvedTasks: []
+        };
+
+        const achievementsList = [
+            { id: 'first_solve', name: 'Первый шаг', icon: '', condition: () => progress.totalSolved >= 1 },
+            { id: 'ten_solves', name: 'Десяточка', icon: '🔟', condition: () => progress.totalSolved >= 10 },
+            { id: 'perfect_streak', name: 'Серия из 5', icon: '🔥', condition: () => progress.streak >= 5 },
+            { id: 'all_variants', name: 'Все варианты', icon: '🎯', condition: () => progress.solvedTasks.length >= 30 },
+            { id: 'high_accuracy', name: 'Снайпер', icon: '🎯', condition: () => progress.totalSolved >= 10 && (progress.correctAnswers / progress.totalSolved) >= 0.9 }
+        ];
+
+        function saveProgress() {
+            localStorage.setItem('ogeProgress', JSON.stringify(progress));
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalSolved').textContent = progress.totalSolved;
+            document.getElementById('correctAnswers').textContent = progress.correctAnswers;
+            document.getElementById('currentStreak').textContent = progress.streak;
+            const accuracy = progress.totalSolved > 0 ? Math.round((progress.correctAnswers / progress.totalSolved) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function checkAchievements() {
+            achievementsList.forEach(ach => {
+                if (ach.condition() && !progress.achievements.includes(ach.id)) {
+                    progress.achievements.push(ach.id);
+                    sounds.achievement();
+                    showNotification(`🏆 Достижение разблокировано: ${ach.name}!`);
+                }
+            });
+            saveProgress();
+        }
+
+        function showNotification(message) {
+            const existingNotif = document.querySelector('.notification');
+            if (existingNotif) existingNotif.remove();
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => { if (notif.parentNode) notif.remove(); }, 8000);
+        }
+
+        function showMainMenu() {
+            sounds.click();
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('learningMode').style.display = 'none';
+            document.getElementById('practiceMode').style.display = 'none';
+            document.getElementById('achievementsMode').style.display = 'none';
+        }
+
+        function showLearningMode() {
+            sounds.click();
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('learningMode').style.display = 'block';
+            renderLearningTasks();
+        }
+
+        function showPracticeMode() {
+            sounds.click();
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('practiceMode').style.display = 'block';
+            selectVariant(1);
+        }
+
+        function showAchievements() {
+            sounds.click();
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('achievementsMode').style.display = 'block';
+            renderAchievements();
+        }
+
+        function selectVariant(variantNum) {
+            sounds.click();
+            document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderPracticeTasks(variantNum);
+        }
+
+        function createMapSVG(variant, task1Solved = false) {
+            const { a, b, c, settlements, mapTransform, cellSize, gridWidth, gridHeight } = variant;
+            const scale = 30;
+            const offsetX = 50;
+            const offsetY = 50;
+            
+            const x1 = offsetX;
+            const y1 = offsetY + c * scale;
+            const x2 = offsetX + a * scale;
+            const y2 = offsetY + c * scale;
+            const x3 = offsetX + (a + b) * scale;
+            const y3 = offsetY + c * scale;
+            const x4 = offsetX + (a + b) * scale;
+            const y4 = offsetY;
+
+            return `
+                <svg class="map-svg" width="${Math.min(700, gridWidth * scale + 100)}" height="${Math.min(450, gridHeight * scale + 100)}" viewBox="0 0 ${gridWidth * scale + 100} ${gridHeight * scale + 100}">
+                    <g transform="${mapTransform}">
+                    ${Array.from({length: a + b + 1}, (_, i) => `<line x1="${offsetX + i * scale}" y1="${offsetY}" x2="${offsetX + i * scale}" y2="${offsetY + c * scale}" stroke="#ddd" stroke-width="1"/>`).join('')}
+                    ${Array.from({length: c + 1}, (_, i) => `<line x1="${offsetX}" y1="${offsetY + i * scale}" x2="${offsetX + (a + b) * scale}" y2="${offsetY + i * scale}" stroke="#ddd" stroke-width="1"/>`).join('')}
+                    <line x1="${x1}" y1="${y1}" x2="${x3}" y2="${y3}" stroke="#666" stroke-width="4"/>
+                    <line x1="${x3}" y1="${y3}" x2="${x4}" y2="${y4}" stroke="#666" stroke-width="4"/>
+                    <line x1="${x1}" y1="${y1}" x2="${x4}" y2="${y4}" stroke="#228B22" stroke-width="3" stroke-dasharray="5,5"/>
+                    <line x1="${x2}" y1="${y2}" x2="${x4}" y2="${y4}" stroke="#8B4513" stroke-width="3" stroke-dasharray="5,5"/>
+                    <ellipse cx="${(x2 + x4) / 2}" cy="${(y2 + y4) / 2}" rx="35" ry="20" fill="#87CEEB" opacity="0.6"/>
+                    <circle cx="${x1}" cy="${y1}" r="10" fill="#66BFBF"/>
+                    <circle cx="${x2}" cy="${y2}" r="10" fill="#66BFBF"/>
+                    <circle cx="${x3}" cy="${y3}" r="10" fill="#66BFBF"/>
+                    <circle cx="${x4}" cy="${y4}" r="10" fill="#66BFBF"/>
+                    ${task1Solved ? `
+                        <text x="${x1}" y="${y1 + 25}" text-anchor="middle" font-size="12" font-weight="bold">${settlements.start}</text>
+                        <text x="${x2}" y="${y2 + 25}" text-anchor="middle" font-size="12" font-weight="bold">${settlements.point2}</text>
+                        <text x="${x3}" y="${y3 + 25}" text-anchor="middle" font-size="12" font-weight="bold">${settlements.point1}</text>
+                        <text x="${x4}" y="${y4 - 15}" text-anchor="middle" font-size="12" font-weight="bold">${settlements.end}</text>
+                    ` : `
+                        <text x="${x1}" y="${y1 + 25}" text-anchor="middle" font-size="18" font-weight="bold">4</text>
+                        <text x="${x2}" y="${y2 + 25}" text-anchor="middle" font-size="18" font-weight="bold">1</text>
+                        <text x="${x3}" y="${y3 + 25}" text-anchor="middle" font-size="18" font-weight="bold">3</text>
+                        <text x="${x4}" y="${y4 - 15}" text-anchor="middle" font-size="18" font-weight="bold">2</text>
+                    `}
+                    <line x1="${offsetX}" y1="${offsetY + c * scale + 40}" x2="${offsetX + scale}" y2="${offsetY + c * scale + 40}" stroke="#000" stroke-width="2"/>
+                    <line x1="${offsetX}" y1="${offsetY + c * scale + 35}" x2="${offsetX}" y2="${offsetY + c * scale + 45}" stroke="#000" stroke-width="2"/>
+                    <line x1="${offsetX + scale}" y1="${offsetY + c * scale + 35}" x2="${offsetX + scale}" y2="${offsetY + c * scale + 45}" stroke="#000" stroke-width="2"/>
+                    <text x="${offsetX + scale/2}" y="${offsetY + c * scale + 60}" text-anchor="middle" font-size="13">${cellSize} км</text>
+                    </g>
+                </svg>
+            `;
+        }
+
+        function renderLearningTasks() {
+            const variant = variants[1];
+            const tasks = generateTasks(variant, 1, true, 'learning');
+            document.getElementById('learningContent').innerHTML = tasks;
+        }
+
+        function renderPracticeTasks(variantNum) {
+            const variant = variants[variantNum + 1];
+            const tasks = generateTasks(variant, variantNum, false, 'practice' + variantNum);
+            document.getElementById('practiceContent').innerHTML = tasks;
+        }
+
+        function generateTasks(variant, variantNum, isLearning, mode) {
+            const { a, b, c, highwaySpeed, trailSpeed, prices, settlements, cellSize, task1Order, hints } = variant;
+            const directDistance1 = Math.sqrt(Math.pow(a + b, 2) + Math.pow(c, 2)) * cellSize;
+            const directDistance2 = Math.sqrt(Math.pow(b, 2) + Math.pow(c, 2)) * cellSize;
+            const highwayDistance1 = (a + b + c) * cellSize;
+            const highwayDistance2 = (b + c) * cellSize;
+            
+            let characters = 'Никита и папа';
+            if (mode === 'practice1') characters = 'Серёжа с папой';
+            else if (mode === 'practice2') characters = 'Дима с дедушкой';
+            else if (mode === 'practice3') characters = 'Ваня с дедушкой';
+
+            const getSettlementName = (key) => settlements[key].split('. ')[1];
+            
+            let task1Question = '';
+            let task1Answer = '';
+            const orderNames = {
+                'start': settlements.start,
+                'end': settlements.end,
+                'point1': settlements.point1,
+                'point2': settlements.point2
+            };
+            const orderNums = {
+                'start': '4',
+                'end': '2',
+                'point1': '3',
+                'point2': '1'
+            };
+            
+            task1Order.forEach((key, index) => {
+                if (index > 0) {
+                    task1Question += ', ';
+                    task1Answer += '';
+                }
+                task1Question += orderNames[key];
+                task1Answer += orderNums[key];
+            });
+            
+            let html = `
+                <div class="task-container">
+                    <div class="task-header">
+                        <div class="task-number">Условие задачи</div>
+                    </div>
+                    <div class="task-description">
+                        <p>${characters} летом живут в деревне ${getSettlementName('start')}. В субботу они собираются съездить на велосипедах в село ${getSettlementName('end')} в спортивный магазин.</p>
+                        <p>Из деревни ${getSettlementName('start')} в село ${getSettlementName('end')} можно проехать по прямой лесной дорожке. Есть более длинный путь: по прямолинейному шоссе через деревню ${getSettlementName('point2')} до деревни ${getSettlementName('point1')}, где нужно повернуть под прямым углом налево на другое шоссе, ведущее в село ${getSettlementName('end')}.</p>
+                        <p>Есть и третий маршрут: в деревне ${getSettlementName('point2')} можно свернуть на прямую тропинку в село ${getSettlementName('end')}, которая идёт мимо пруда.</p>
+                        <p>Лесная дорожка и тропинка образуют с шоссе прямоугольные треугольники.</p>
+                        <p>По шоссе ${characters.split(' ')[0]} с ${characters.split(' ').pop()} едут со скоростью ${highwaySpeed} км/ч, а по лесной дорожке и тропинке — со скоростью ${trailSpeed} км/ч.</p>
+                        <p>На плане изображено взаимное расположение населённых пунктов, длина стороны каждой клетки равна ${cellSize} км.</p>
+                    </div>
+                    <div class="map-container" id="mapContainer_${mode}">
+                        ${createMapSVG(variant, false)}
+                    </div>
+                </div>
+            `;
+
+            html += createTask(1, `Пользуясь описанием, определите, какими цифрами на плане обозначены населённые пункты: ${task1Question}. Заполните таблицу. В бланк ответов перенесите последовательность трёх цифр без пробелов, запятых и других дополнительных символов.`, task1Answer, mode, isLearning, isLearning, hints[0]);
+            html += createTask(2, `Сколько километров проедут ${characters} от деревни ${getSettlementName('start')} до села ${getSettlementName('end')}, если они поедут по шоссе через деревню ${getSettlementName('point1')}?`, highwayDistance1, mode, isLearning, false, hints[1]);
+            html += createTask(3, `Сколько километров проедут ${characters} от деревни ${getSettlementName('point2')} до села ${getSettlementName('end')}, если они поедут по шоссе через деревню ${getSettlementName('point1')}?`, highwayDistance2, mode, isLearning, false, hints[2]);
+            html += createTask(4, `Найдите расстояние от деревни ${getSettlementName('start')} до села ${getSettlementName('end')} по прямой. Ответ дайте в километрах.`, Math.round(directDistance1 * 100) / 100, mode, isLearning, false, hints[3]);
+            html += createTask(5, `Найдите расстояние от деревни ${getSettlementName('point2')} до села ${getSettlementName('end')} по прямой. Ответ дайте в километрах.`, Math.round(directDistance2 * 100) / 100, mode, isLearning, false, hints[4]);
+            html += createTask(6, `Сколько минут затратят на дорогу из деревни ${getSettlementName('start')} в село ${getSettlementName('end')} ${characters}, если поедут через деревню ${getSettlementName('point1')}?`, Math.round((highwayDistance1 / highwaySpeed) * 60), mode, isLearning, false, hints[5]);
+            html += createTask(7, `Сколько минут затратят на дорогу из деревни ${getSettlementName('start')} в село ${getSettlementName('end')} ${characters}, если они поедут сначала по шоссе, а затем свернут в деревне ${getSettlementName('point2')} на прямую тропинку?`, Math.round(((a * cellSize) / highwaySpeed + directDistance2 / trailSpeed) * 60), mode, isLearning, false, hints[6]);
+            
+            const task9Items = { bread: 3, beef: 2, potato: 3 };
+            const task9Prices = {};
+            for (let shop in prices) task9Prices[shop] = prices[shop].bread * 3 + prices[shop].beef * 2 + prices[shop].potato * 3;
+            const task9MinShop = Object.keys(task9Prices).reduce((a, b) => task9Prices[a] < task9Prices[b] ? a : b);
+            html += createTask(8, `${characters} хотят купить 3 батона хлеба, 2 кг говядины и 3 кг картофеля. В каком магазине такой набор продуктов будет стоить дешевле всего? В ответ запишите стоимость данного набора в этом магазине.`, task9Prices[task9MinShop], mode, isLearning, false, hints[7], createPriceTable(prices, task9Items));
+            
+            const task10Items = { milk: 6, bread: 4, beef: 3 };
+            const task10Prices = {};
+            for (let shop in prices) task10Prices[shop] = prices[shop].milk * 6 + prices[shop].bread * 4 + prices[shop].beef * 3;
+            const task10MinShop = Object.keys(task10Prices).reduce((a, b) => task10Prices[a] < task10Prices[b] ? a : b);
+            html += createTask(9, `${characters} хотят купить 6 л молока, 4 батона хлеба и 3 кг говядины. В каком магазине такой набор продуктов будет стоить дешевле всего? В ответ запишите стоимость данного набора в этом магазине.`, task10Prices[task10MinShop], mode, isLearning, false, hints[8], createPriceTable(prices, task10Items));
+
+            return html;
+        }
+
+        function getShopName(shop) {
+            const names = {
+                lyagushkino: 'д. Лягушкино', vyatskoe: 'с. Вятское', kurovka: 'д. Куровка', marusino: 'д. Марусино',
+                pirozhki: 'д. Пирожки', kizhikskoe: 'с. Кижикское', vasilyevo: 'д. Васильево', ryabinovka: 'д. Рябиновка',
+                vasilyevka: 'д. Васильевка', plodorodnoe: 'с. Плодородное', sharovka: 'д. Шаровка', rassvet: 'д. Рассвет',
+                olgino: 'с. Ольгино', divnaya: 'д. Дивная', rovnoe: 'с. Ровное', kalinovka: 'д. Калиновка'
+            };
+            return names[shop] || shop;
+        }
+
+        function createPriceTable(prices, items) {
+            let html = '<div class="table-container"><table><tr><th>Продукт</th><th>д. Лягушкино</th><th>с. Вятское</th><th>д. Куровка</th><th>д. Марусино</th></tr>';
+            const productNames = { milk: 'Молоко (1 л)', bread: 'Хлеб (1 батон)', cheese: 'Сыр (1 кг)', beef: 'Говядина (1 кг)', potato: 'Картофель (1 кг)' };
+            for (let product in productNames) {
+                const isNeeded = items[product] !== undefined;
+                html += `<tr class="${isNeeded ? 'highlight' : ''}"><td>${productNames[product]}${isNeeded ? ` ×${items[product]}` : ''}</td>`;
+                for (let shop in prices) html += `<td>${prices[shop][product]}</td>`;
+                html += '</tr>';
+            }
+            html += '</table></div>';
+            return html;
+        }
+
+        function createTask(number, description, correctAnswer, taskId, isLearning, updateMap = false, hint = '', extraContent = '') {
+            const fullTaskId = `task_${taskId}_${number}`;
+            const isSolved = progress.solvedTasks.includes(fullTaskId);
+            
+            return `
+                <div class="task-container">
+                    <div class="task-header">
+                        <div class="task-number">Задание №${number}</div>
+                        ${isSolved ? '<span style="color: #27ae60; font-weight: 600;">✓ Решено</span>' : ''}
+                    </div>
+                    <div class="task-description"><p>${description}</p></div>
+                    ${extraContent}
+                    <div class="answer-section">
+                        <input type="text" class="answer-input" id="answer_${fullTaskId}" placeholder="Введите ответ...">
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" onmouseover="sounds.hover()" onclick="checkAnswer('${fullTaskId}', '${correctAnswer}', '${taskId}', ${updateMap})">Проверить ответ</button>
+                            ${isLearning ? `<button class="btn btn-hint" onmouseover="sounds.hover()" onclick="toggleHint('hint_${fullTaskId}')">💡 Подсказка</button>` : ''}
+                        </div>
+                        ${isLearning && hint ? `<div class="hint-box" id="hint_${fullTaskId}"><strong>Подсказка:</strong> ${hint}</div>` : ''}
+                        <div class="feedback" id="feedback_${fullTaskId}"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkAnswer(taskId, correctAnswer, mode, updateMap = false) {
+            const userAnswer = document.getElementById(`answer_${taskId}`).value.trim();
+            const feedback = document.getElementById(`feedback_${taskId}`);
+            
+            if (!userAnswer) {
+                feedback.textContent = '⚠️ Введите ответ!';
+                feedback.className = 'feedback incorrect show';
+                return;
+            }
+
+            const isCorrect = userAnswer === correctAnswer.toString();
+            
+            if (isCorrect) {
+                sounds.correct();
+                feedback.textContent = '✅ Правильно! Отличная работа!';
+                feedback.className = 'feedback correct show';
+                
+                if (updateMap && mode === 'learning') {
+                    const mapContainer = document.getElementById('mapContainer_learning');
+                    if (mapContainer) mapContainer.innerHTML = createMapSVG(variants[1], true);
+                }
+                
+                if (!progress.solvedTasks.includes(taskId)) {
+                    progress.solvedTasks.push(taskId);
+                    progress.totalSolved++;
+                    progress.correctAnswers++;
+                    progress.streak++;
+                    saveProgress();
+                    checkAchievements();
+                }
+            } else {
+                sounds.incorrect();
+                feedback.textContent = '❌ Неправильно. Попробуйте ещё раз!';
+                feedback.className = 'feedback incorrect show';
+                progress.streak = 0;
+                saveProgress();
+            }
+        }
+
+        function toggleHint(hintId) {
+            sounds.click();
+            const hint = document.getElementById(hintId);
+            hint.classList.toggle('show');
+        }
+
+        function renderAchievements() {
+            let html = '<div class="achievements">';
+            achievementsList.forEach(ach => {
+                const isUnlocked = progress.achievements.includes(ach.id);
+                html += `
+                    <div class="achievement ${isUnlocked ? 'unlocked' : ''}">
+                        <div class="achievement-icon">${ach.icon}</div>
+                        <div class="achievement-name">${ach.name}</div>
+                        ${isUnlocked ? '<div style="color: #27ae60; font-size: 0.85em; margin-top: 8px; font-weight: 600;">✓ Получено</div>' : '<div style="color: #95a5a6; font-size: 0.85em; margin-top: 8px;">🔒 Заблокировано</div>'}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            html += `
+                <div class="task-container" style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 25px; color: #2c3e50; font-size: 1.5em;">📊 Ваша статистика</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${Math.min(100, (progress.solvedTasks.length / 30) * 100)}%">
+                            ${progress.solvedTasks.length} / 30 задач
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px; line-height: 2; color: #7f8c8d;">
+                        <strong style="color: #2c3e50;">Всего решено:</strong> ${progress.totalSolved} задач<br>
+                        <strong style="color: #2c3e50;">Правильных ответов:</strong> ${progress.correctAnswers}<br>
+                        <strong style="color: #2c3e50;">Точность:</strong> ${progress.totalSolved > 0 ? Math.round((progress.correctAnswers / progress.totalSolved) * 100) : 0}%<br>
+                        <strong style="color: #2c3e50;">Лучшая серия:</strong> ${progress.streak} подряд 🔥
+                    </p>
+                </div>
+            `;
+            
+            document.getElementById('achievementsContent').innerHTML = html;
+        }
+
+        updateStats();
+    </script>
+</body>
+</html>
